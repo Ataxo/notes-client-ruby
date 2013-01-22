@@ -1,12 +1,12 @@
 # -*- encoding : utf-8 -*-
 
-module SlimApi
+module NotesClient
 
   @config = {
-    url: "http://slimapi.ataxo.com",
+    url: "http://notes.ataxo.com",
     version: :v1,
     taxonomy: :sandbox,
-    api_token: "SlimApi.api_token = 'YOUR TOKEN'",
+    api_token: "NotesApi.api_token = 'YOUR TOKEN'",
   }
   @find_options = {
     limit: 10, 

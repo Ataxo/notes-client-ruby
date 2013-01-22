@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 
-module SlimApi
-  module SlimObject
+module NotesClient
+  module NotesObject
 
     def self.included(base)
       base.class_eval do
@@ -24,13 +24,13 @@ module SlimApi
       end
 
       def find args = {}
-        find_args = SlimApi.find_options.merge(args)
+        find_args = NotesClient.find_options.merge(args)
         response = request(:get, find_args)
         if response["status"] == "ok"
           out = response["#{self::NAME.to_s.pluralize}"].collect{ |arg|
             new(arg.symbolize_keys).exists!
           }
-          array = SlimArray.new out
+          array = NotesArray.new out
           array.find_options = find_args
           array.total_count = response["total_count"]
           array.limit = find_args[:limit]
@@ -45,13 +45,13 @@ module SlimApi
       def request verb, params = {}, method = nil
 
         curl = Curl::Easy.new 
-        curl.headers["Api-Token"] = SlimApi.api_token
+        curl.headers["Api-Token"] = NotesClient.api_token
         curl.headers["Content-Type"] = "application/json"
         curl.verbose = false
         curl.resolve_mode = :ipv4
 
         #set right url dependetnly on verb
-        url = SlimApi.api_url(self::NAME, method)
+        url = NotesClient.api_url(self::NAME, method)
         case verb
         when :get then
           curl.url = url+ (params ? "?#{params.to_query}" : "")
@@ -91,16 +91,10 @@ module SlimApi
           response = self.class.request(:post, self)
           if response["status"] == "ok"
             exists!
-            if response["created"].is_a?(Hash)
-              self.id = response["created"]["id"]
-            end
+            self.id = response["#{self.class::NAME}"]["id"]
             true
           elsif response["error_type"] == "ApiError::BadRequest"
-            if response["errors"].is_a?(Hash)
-              @errors = response["errors"]["_errors"]
-            else
-              @errors = response["message"]
-            end
+            @errors = response["message"]
             false
           else
             raise "#{response["error_type"]} - #{response["message"]}"

@@ -14,11 +14,11 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "slim-api-ruby"
-  gem.homepage = "http://github.com/Ataxo/slim-api-ruby"
+  gem.name = "notes-client-ruby"
+  gem.homepage = "http://github.com/Ataxo/notes-client-ruby"
   gem.license = "MIT"
-  gem.summary = %Q{Easier access Ataxo Slim Api service}
-  gem.description = %Q{Wrapper over REST api of Ataxo - enables you to find, create, update and destroy objects}
+  gem.summary = %Q{Easier access Notes service}
+  gem.description = %Q{Wrapper over REST api of Notes server - enables you to find, create, update and destroy objects}
   gem.email = "ondrej@bartas.cz"
   gem.authors = ["Ondrej Bartas"]
   # dependencies defined in Gemfile

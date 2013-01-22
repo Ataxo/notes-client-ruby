@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 
-module SlimApi
-  class SlimArray < Array
+module NotesClient
+  class NotesArray < Array
 
     attr_accessor :total_count, :limit, :offset, :find_options, :find_object
 
