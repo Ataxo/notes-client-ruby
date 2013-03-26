@@ -50,6 +50,8 @@ module NotesClient
 
       @logger.info message
     end
+  rescue Exception => e
+    warn "Unable to log request: #{e.message}\n#{e.backtrace}".yellow
   end
 
   def self.url= url
