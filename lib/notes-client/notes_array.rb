@@ -21,6 +21,16 @@ module NotesClient
       end
     end
 
+    def all
+      notes_all = []
+      notes_self = self
+      while notes_self do
+        notes_all += notes_self
+        notes_self = notes_self.next_page
+      end
+      notes_all
+    end
+
     def page_count
       (@total_count.to_f/@limit.to_f).ceil
     end
@@ -28,7 +38,7 @@ module NotesClient
     def actual_page
       (@offset.to_f/@limit.to_f).ceil+1
     end
-    
+
     def page_range
       max = @offset+@limit-1
       max = @total_count-1 if @total_count < max
