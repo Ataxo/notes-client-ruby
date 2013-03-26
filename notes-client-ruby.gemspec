@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "notes-client-ruby"
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ondrej Bartas"]
-  s.date = "2013-01-22"
+  s.date = "2013-03-26"
   s.description = "Wrapper over REST api of Notes server - enables you to find, create, update and destroy objects"
   s.email = "ondrej@bartas.cz"
   s.extra_rdoc_files = [
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "lib/notes-client/notes_client.rb",
     "lib/notes-client/notes_object.rb",
     "lib/notes-client/objects/note.rb",
+    "notes-client-ruby.gemspec",
     "slim-api-ruby.gemspec",
     "test/helper.rb",
     "test/test_slim-api.rb"
@@ -46,6 +47,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_runtime_dependency(%q<hashr>, [">= 0"])
       s.add_runtime_dependency(%q<activesupport>, [">= 0"])
+      s.add_runtime_dependency(%q<colorize>, [">= 0"])
       s.add_development_dependency(%q<bundler>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
     else
@@ -53,6 +55,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_dependency(%q<hashr>, [">= 0"])
       s.add_dependency(%q<activesupport>, [">= 0"])
+      s.add_dependency(%q<colorize>, [">= 0"])
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
     end
@@ -61,6 +64,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<yajl-ruby>, [">= 0"])
     s.add_dependency(%q<hashr>, [">= 0"])
     s.add_dependency(%q<activesupport>, [">= 0"])
+    s.add_dependency(%q<colorize>, [">= 0"])
     s.add_dependency(%q<bundler>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
   end
