@@ -7,6 +7,7 @@ gem "curb"
 gem "yajl-ruby"
 gem "hashr"
 gem "activesupport"
+gem "colorize"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

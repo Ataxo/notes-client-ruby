@@ -7,11 +7,50 @@ module NotesClient
     version: :v1,
     taxonomy: :sandbox,
     api_token: "NotesApi.api_token = 'YOUR TOKEN'",
+
+    #logger
+    logger_level: :info,
   }
   @find_options = {
-    limit: 10, 
+    limit: 10,
     offset: 0
   }
+
+  @logger = nil
+
+  def self.logger= logger
+    logger.level = Logger.const_get(@config[:logger_level].to_s.upcase)
+    @logger = logger
+  end
+
+  def self.logger_level= level
+    @config[:logger_level] = level
+  end
+
+  def self.logger
+    @logger
+  end
+
+  def self.log request
+    if @logger
+      @logger.debug "#{"-"*80}\nHeader: #{request[:header]}\nRequest: #{request[:verb]}\nURL: #{request[:url]}\n#{request[:response]}\nPARAMS:#{request[:params]}"
+      verb = "#{request[:verb].to_s.upcase}"
+
+      message = "NotesClient:".cyan + " " + verb.yellow + " "*(8-verb.size)
+      if request[:response_hash][:status] == "error"
+        executed = "ERROR"
+        message += executed.red + " "*(8-executed.size)
+        message +=  "#{request[:url]}" + " "
+        message +=  request[:response_hash][:message].red
+      else
+        executed = "#{request[:response_hash][:executed_in].gsub("s","").to_f.round(3)}s"
+        message += executed.green + " "*(8-executed.size)
+        message +=  "#{request[:url]}" + " "
+      end
+
+      @logger.info message
+    end
+  end
 
   def self.url= url
     @config[:url] = url

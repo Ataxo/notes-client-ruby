@@ -2,6 +2,8 @@
 require 'active_support/inflector'
 require 'active_support/core_ext'
 
+require 'colorize'
+
 require 'hashr'
 require 'curb'
 require 'yajl'

@@ -26,25 +26,25 @@ module NotesClient
       def find args = {}
         find_args = NotesClient.find_options.merge(args)
         response = request(:get, find_args)
-        if response["status"] == "ok"
-          out = response["#{self::NAME.to_s.pluralize}"].collect{ |arg|
+        if response[:status] == "ok"
+          out = response["#{self::NAME.to_s.pluralize}".to_sym].collect{ |arg|
             new(arg.symbolize_keys).exists!
           }
           array = NotesArray.new out
           array.find_options = find_args
-          array.total_count = response["total_count"]
+          array.total_count = response[:total_count]
           array.limit = find_args[:limit]
           array.offset = find_args[:offset]
           array.find_object = self
           array
         else
-          raise "#{response["error_type"]} - #{response["message"]}"
+          raise "#{response[:error_type]} - #{response[:message]}"
         end
       end
 
       def request verb, params = {}, method = nil
 
-        curl = Curl::Easy.new 
+        curl = Curl::Easy.new
         curl.headers["Api-Token"] = NotesClient.api_token
         curl.headers["Content-Type"] = "application/json"
         curl.verbose = false
@@ -54,7 +54,8 @@ module NotesClient
         url = NotesClient.api_url(self::NAME, method)
         case verb
         when :get then
-          curl.url = url+ (params ? "?#{params.to_query}" : "")
+          curl.url = url
+          curl.headers["X-HTTP-Method-override"] = "get"
         when :post then
           curl.url = url
         when :put then
@@ -63,16 +64,15 @@ module NotesClient
           curl.url = url+ (params.is_a?(Hash) && params[:id] ? "/#{params[:id]}" : "")
         end
 
-        #set body for creation and update and delete
-        unless verb == :get
-          curl.post_body = Yajl::Encoder.encode(params)
-        end
+        curl.post_body = Yajl::Encoder.encode(params)
 
         curl.http verb.to_s.upcase
-        response = Yajl::Parser.parse(curl.body_str)
+        response = Yajl::Parser.parse(curl.body_str, symbolize_keys: true)
+        NotesClient.log(header: curl.headers, verb: (verb == :find ? :get : verb), url: curl.url, params: params, response: curl.body_str, response_hash: response)
+        response
       end
 
-    end 
+    end
 
     module InstanceMethods
       def exists!
@@ -89,29 +89,29 @@ module NotesClient
           update
         else
           response = self.class.request(:post, self)
-          if response["status"] == "ok"
+          if response[:status] == "ok"
             exists!
-            self.id = response["#{self.class::NAME}"]["id"]
+            self.id = response["#{self.class::NAME}".to_sym][:id]
             true
-          elsif response["error_type"] == "ApiError::BadRequest"
-            @errors = response["message"]
+          elsif response[:error_type] == "ApiError::BadRequest"
+            @errors = response[:message]
             false
           else
-            raise "#{response["error_type"]} - #{response["message"]}"
+            raise "#{response[:error_type]} - #{response[:message]}"
           end
         end
       end
 
       def update
         response = self.class.request(:put, self)
-        if response["status"] == "ok"
-          self.id = response["#{self.class::NAME}"]["id"]
+        if response[:status] == "ok"
+          self.id = response["#{self.class::NAME}".to_sym][:id]
           true
-        elsif response["error_type"] == "ApiError::BadRequest"
-          @errors = response["message"]
+        elsif response[:error_type] == "ApiError::BadRequest"
+          @errors = response[:message]
           false
         else
-          raise "#{response["error_type"]} - #{response["message"]}"
+          raise "#{response[:error_type]} - #{response[:message]}"
         end
       end
 

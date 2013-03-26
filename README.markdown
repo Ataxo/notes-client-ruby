@@ -37,6 +37,35 @@ NotesClient.version = :v1
 NotesClient.url = "http://notes.ataxo.com"
 ```
 
+## Logging
+
+When you need to log requests use:
+``` ruby
+NotesClient.logger = Logger.new(STDOUT)
+#or
+NotesClient.logger = Logger.new("notes_client.log")
+```
+this will return you:
+```
+--------------------------------------------------------------------------------
+Header: {"Api-Token"=>"YOUR TOKEN", "Content-Type"=>"application/json"}
+Request: find
+URL: http://notes.ataxo.com/v1/sandbox/objects
+{
+  "status": "ok",
+  "code": 200,
+  "message": "ok",
+  "executed_at": "2013-03-12 11:31:21",
+  "executed_in": "0.017648806s",
+  "objects": [
+    {
+      ......
+    }
+  ],
+  "total_count": 1
+}
+```
+
 ## Working with Gem
 
 You can access Main classes: Notes
@@ -66,8 +95,8 @@ notes = NoteClient::Notes.find :id => 12345678
 # find will always return array!
 ```
 
-### Order 
- 
+### Order
+
 You can order you find requests:
 
 ```ruby
@@ -84,7 +113,7 @@ NotesClient.find_options
 #=> { limit: 10, offset: 0 }
 # and you can setup it by:
 NotesClient.find_options = { limit: 20, offset: 0 }
-#this is default configuration for all find methods, 
+#this is default configuration for all find methods,
 #but you can easily overwrite for one call it by adding limit/offset to find method:
 NotesClient::Notes.find limit: 15
 
